@@ -8,12 +8,8 @@ import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
+# from yellowbrick.classifier import ClassificationReport
 
-"""
-from sklearn.naive_bayes import GaussianNB
-from sklearn.neighbors import KNeighborsClassifier
-from yellowbrick.classifier import ClassificationReport
-"""
 
 df = pd.read_csv('Lab6-Proj1_Dataset.csv', delimiter=',')
 
