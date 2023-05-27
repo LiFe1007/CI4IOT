@@ -38,7 +38,7 @@ def data_normalization(dt_t):
     scaler = MinMaxScaler(feature_range=(0, 1))
 
     # Apply normalization to all columns
-    # d = pd.DataFrame(scaler.fit_transform(d), columns=d.columns)
+    d = pd.DataFrame(scaler.fit_transform(d), columns=d.columns)
     # print(d)
 
     # --------------------------------------------------------------
