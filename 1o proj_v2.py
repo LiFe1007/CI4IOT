@@ -54,10 +54,10 @@ def training_validation_test(d, t):
     return data_train, target_train, data_val, target_val, data_test, target_test
 
 
-def to_graph(mlp1, mlp2, data_test, target_test):
-    print(mlp1.score(data_test, target_test))  # score: Maior = Melhor
-    print(mlp2.score(data_test, target_test))
-    plt.hist([abs(target_test - mlp1.predict(data_test)), abs(target_test - mlp2.predict(data_test))], bins=20,
+def to_graph(mlp1, mlp2, data_set, target_set):
+    print(mlp1.score(data_set, target_set))  # score: Maior = Melhor
+    print(mlp2.score(data_set, target_set))
+    plt.hist([abs(target_set - mlp1.predict(data_set)), abs(target_set - mlp2.predict(data_set))], bins=20,
              label=['MLP 1', 'MLP 2'])
     plt.legend()
     plt.xlabel('Residue')
@@ -135,7 +135,7 @@ def validation(data_train, target_train, data_val, target_val):
     plt.title('Histogram of Prediction Errors')
     plt.show()
 
-    to_graph(classifier, model, data_test, target_test)
+    to_graph(classifier, model, data_val, target_val)
 
     return classifier
 
