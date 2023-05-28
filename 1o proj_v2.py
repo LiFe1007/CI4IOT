@@ -48,8 +48,10 @@ def data_normalization(dt_t):
 
 # efetuar a divisao
 def training_validation_test(d, t):
-    data_train, data_test, target_train, target_test = train_test_split(d, t, test_size=0.30, random_state=42)
-    return data_train, target_train, data_test, target_test
+    data_train, data_main, target_train, target_main = train_test_split(d, t, test_size=0.30, random_state=42)
+    data_test, data_val, target_test, target_val = train_test_split(data_main, target_main, test_size=0.50,
+                                                                    shuffle=False, random_state=42)
+    return data_train, target_train, data_val, target_val, data_test, target_test
 
 
 def to_graph(mlp1, mlp2, data_test, target_test):
@@ -63,7 +65,7 @@ def to_graph(mlp1, mlp2, data_test, target_test):
     plt.show()
 
 
-def validation(data_train, target_train, data_test, target_test):
+def validation(data_train, target_train, data_val, target_val):
     # Grid Search Cross Validation
     param_grid = {'activation': ['logistic'], 'alpha': [0.001, 0.0001, 0.00001],
                   'early_stopping': [False, True], 'hidden_layer_sizes': [(20,), (25,), (30,)],
@@ -100,14 +102,14 @@ def validation(data_train, target_train, data_test, target_test):
     # ----------------------------------------------------------------
 
     # Testing -------------------------------------------------
-    target_pred = classifier.predict(data_test)
+    target_pred = classifier.predict(data_val)
     # Compute Mean Squared Error (MSE)
-    mse = mean_squared_error(target_test, target_pred)
+    mse = mean_squared_error(target_val, target_pred)
     rmse = sqrt(mse)
     print("Root Mean Squared Error (RMSE):", rmse)
 
     # Compute Mean Absolute Error (MAE)
-    mae = mean_absolute_error(target_test, target_pred)
+    mae = mean_absolute_error(target_val, target_pred)
     print("Mean Absolute Error (MAE):", mae)
     # -------------------------------------------------------
 
@@ -122,13 +124,13 @@ def validation(data_train, target_train, data_test, target_test):
     # ----------------------------------------------------
 
     plt.figure(figsize=(10, 6))
-    sns.scatterplot(x=target_test, y=target_pred)
+    sns.scatterplot(x=target_val, y=target_pred)
     plt.xlabel('Actual ESLE', fontsize=20)
     plt.ylabel('Predicted ESLE', fontsize=20)
     plt.title('Actual vs Predicted ESLE', fontsize=30)
     plt.show()
 
-    error = target_test - target_pred
+    error = target_val - target_pred
     sns.displot(error, bins=25)
     plt.title('Histogram of Prediction Errors')
     plt.show()
@@ -155,9 +157,9 @@ if __name__ == '__main__':
     df = pd.read_csv('Lab6-Proj1_Dataset.csv', delimiter=',')
     df = data_cleaning(df)
     data, target = data_normalization(df)
-    d_train, t_train, d_test, t_test = training_validation_test(data, target)
+    d_train, t_train, d_val, t_val, d_test, t_test = training_validation_test(data, target)
 
-    clf_final = validation(d_train, t_train, d_test, t_test)
+    clf_final = validation(d_train, t_train, d_val, t_val)
 
     test(d_test, t_test)
     # TestMe("Lab6-Proj1_Testset.csv")
